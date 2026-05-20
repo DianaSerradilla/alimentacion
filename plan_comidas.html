@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plan de Alimentación y Suplementación</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --surface: #151a28;
+            --surface-hover: #1e2538;
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --accent-primary: #ff5e3a; /* Vibrant orange */
+            --accent-secondary: #3b82f6; /* Blue */
+            --accent-tertiary: #10b981; /* Green */
+            --accent-alert: #ef4444; /* Red */
+            --border-color: rgba(255, 255, 255, 0.08);
+            --gradient-primary: linear-gradient(135deg, #ff5e3a, #ff2a5f);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 1rem;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(11, 15, 25, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 1rem;
+            margin: -1rem -1rem 1.5rem -1rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            gap: 0.8rem;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+        
+        nav::-webkit-scrollbar {
+            display: none;
+        }
+
+        nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            white-space: nowrap;
+            padding: 0.6rem 1.2rem;
+            border-radius: 99px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        nav a:hover, nav a:active {
+            color: var(--text-primary);
+            background: var(--surface-hover);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        @media (min-width: 768px) {
+            nav { margin: -2rem -2rem 2rem -2rem; padding: 1rem 2rem; }
+        }
+
+        header {
+            text-align: center;
+            padding: 3rem 1rem;
+            margin-bottom: 2rem;
+            background: var(--surface);
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 3rem 0 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--surface);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            scroll-margin-top: 90px;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--accent-secondary);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Grid Layouts */
+        .grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .grid-cols-2 { grid-template-columns: 1fr; }
+        .grid-cols-3 { grid-template-columns: 1fr; }
+
+        @media (min-width: 768px) {
+            .grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+            .grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+            body { padding: 2rem; }
+        }
+
+        /* Cards */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .card-body p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .card-body strong {
+            color: var(--text-primary);
+        }
+
+        /* Table Alternative (Cards for Mobile) */
+        .supplement-card {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 99px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--accent-secondary);
+            width: fit-content;
+        }
+
+        .badge.orange { background: rgba(255, 94, 58, 0.1); color: var(--accent-primary); }
+        .badge.green { background: rgba(16, 185, 129, 0.1); color: var(--accent-tertiary); }
+
+        /* Schedule specific */
+        .day-card {
+            border-left: 4px solid var(--accent-secondary);
+        }
+        .day-card.impact {
+            border-left-color: var(--accent-primary);
+        }
+        
+        /* Alerts */
+        .alert {
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 4px solid var(--accent-alert);
+            padding: 1rem;
+            border-radius: 0 12px 12px 0;
+            margin: 1rem 0;
+        }
+
+        .alert strong {
+            color: var(--accent-alert);
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .alert p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        /* Specific blocks */
+        .meal-comparison {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (min-width: 992px) {
+            .meal-comparison { grid-template-columns: 1fr 1fr; }
+        }
+
+        .meal-box {
+            background: var(--surface);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+
+        .meal-box.diana { border-top: 3px solid #bc8cff; }
+        .meal-box.mati { border-top: 3px solid var(--accent-secondary); }
+
+        .meal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .person-tag {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+        }
+        .person-tag.diana { color: #bc8cff; }
+        .person-tag.mati { color: var(--accent-secondary); }
+
+        .macro-bar {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            background: var(--bg-color);
+            padding: 0.75rem;
+            border-radius: 8px;
+        }
+        
+        .macro-item {
+            flex: 1;
+            text-align: center;
+        }
+        
+        .macro-val {
+            display: block;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .macro-p { color: #38bdf8; }
+        .macro-c { color: #4ade80; }
+        .macro-g { color: #fbbf24; }
+
+        .list-group {
+            list-style: none;
+        }
+        .list-group li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+        .list-group li:last-child {
+            border-bottom: none;
+        }
+        .list-group li strong {
+            color: var(--text-primary);
+        }
+        
+        .tip-card {
+            background: linear-gradient(145deg, var(--surface), var(--bg-color));
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <nav>
+        <a href="#suplementacion">💊 Suplementación</a>
+        <a href="#esquema">📅 Esquema</a>
+        <a href="#desayunos">☀️ Desayunos</a>
+        <a href="#carbo-proteicas">🔋 Carbo-Proteicas</a>
+        <a href="#solo-proteicas">📉 Solo Proteicas</a>
+        <a href="#batido">🥤 Batido</a>
+        <a href="#matematica">🧮 Matemática</a>
+        <a href="#protocolos">💧 Protocolos</a>
+        <a href="#snacks">🥜 Snacks</a>
+    </nav>
+    <header>
+        <h1>Plan de Alimentación y Suplementación</h1>
+        <p style="color: var(--text-secondary); font-size: 1.1rem;">Estrategia nutricional y deportiva de alto rendimiento</p>
+    </header>
+
+    <!-- SUPLEMENTACIÓN -->
+    <h2 id="suplementacion">💊 Suplementación Ergogénica</h2>
+    <div class="grid grid-cols-3">
+        <div class="card supplement-card">
+            <span class="badge">5g</span>
+            <div class="card-title">Creatina Monohidrato</div>
+            <div class="card-body">
+                <p><strong>Momento:</strong> En el desayuno</p>
+                <p><strong>Objetivo:</strong> Resaturación de ATP y resiliencia cognitiva frente a privación de sueño.</p>
+            </div>
+        </div>
+
+        <div class="card supplement-card">
+            <span class="badge orange">1g a 2g</span>
+            <div class="card-title">Melena de León</div>
+            <div class="card-body">
+                <p><strong>Momento:</strong> 45 min antes de sesión (Boxeo/Calistenia nocturna)</p>
+                <p><strong>Objetivo:</strong> Aumento del enfoque (NGF) y mitigación de la fatiga del SNC.</p>
+            </div>
+        </div>
+
+        <div class="card supplement-card">
+            <span class="badge green">300mg - 600mg</span>
+            <div class="card-title">Ashwagandha</div>
+            <div class="card-body">
+                <p><strong>Momento:</strong> Con la cena (noche)</p>
+                <p><strong>Objetivo:</strong> Reducción del cortisol inducido por el entrenamiento y mejora endocrina.</p>
+            </div>
+        </div>
+
+        <div class="card supplement-card">
+            <span class="badge">400mg - 1g</span>
+            <div class="card-title">Magnesio (Bisglicinato o Treonato)</div>
+            <div class="card-body">
+                <p><strong>Momento:</strong> 30 min antes de dormir</p>
+                <p><strong>Objetivo:</strong> Apagado del SNS; facilitación del sueño de ondas lentas.</p>
+            </div>
+        </div>
+
+        <div class="card supplement-card">
+            <span class="badge orange">2g a 3g</span>
+            <div class="card-title">Omega-3 (EPA/DHA)</div>
+            <div class="card-body">
+                <p><strong>Momento:</strong> Almuerzo o cena (requiere grasa para absorberse)</p>
+                <p><strong>Objetivo:</strong> Profilaxis neurológica (vital por impactos del boxeo) y control de inflamación.</p>
+            </div>
+        </div>
+
+        <div class="card supplement-card">
+            <span class="badge green">6.4g (fase de carga)</span>
+            <div class="card-title">Beta-Alanina</div>
+            <div class="card-body">
+                <p><strong>Dosis:</strong> 6 cápsulas diarias (3g diarios). 2 desayuno, 2 almuerzo, 2 cena.</p>
+                <p><strong>Duración:</strong> Todos los días por 5-6 semanas. Luego 4 cáps mantenimiento.</p>
+                <p><strong>Objetivo:</strong> Esponja molecular para retrasar fallo por ácido láctico en AMRAPs.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ESQUEMA ALIMENTACIÓN -->
+    <h2 id="esquema">📅 Esquema Alimentación Diana</h2>
+    <div class="grid grid-cols-3">
+        <div class="card day-card impact">
+            <div class="card-title">🔥 Lunes</div>
+            <div class="card-body">
+                <p><strong>Entreno:</strong> PULL 2 (07:00) + Boxeo (19:00)<br><span class="badge orange" style="margin-top: 5px;">Doble Impacto</span></p>
+                <p><strong>Almuerzo:</strong> Carbo-Proteico</p>
+                <p><strong>Cena:</strong> Carbo-Proteico (INNEGOCIABLE)</p>
+            </div>
+        </div>
+
+        <div class="card day-card">
+            <div class="card-title">🤸‍♀️ Martes</div>
+            <div class="card-body">
+                <p><strong>Entreno:</strong> Calistenia PUSH (08:00) + Movilidad (09:00)</p>
+                <p><strong>Almuerzo:</strong> Carbo-Proteico</p>
+                <p><strong>Cena:</strong> Solo Proteína</p>
+            </div>
+        </div>
+
+        <div class="card day-card impact">
+            <div class="card-title">🔥 Miércoles</div>
+            <div class="card-body">
+                <p><strong>Entreno:</strong> LEGS 2 (07:00) + Boxeo (19:00)<br><span class="badge orange" style="margin-top: 5px;">Doble Impacto</span></p>
+                <p><strong>Almuerzo:</strong> Carbo-Proteico</p>
+                <p><strong>Cena:</strong> Carbo-Proteico (INNEGOCIABLE)</p>
+            </div>
+        </div>
+
+        <div class="card day-card">
+            <div class="card-title">🤸‍♀️ Jueves</div>
+            <div class="card-body">
+                <p><strong>Entreno:</strong> Calistenia PULL (08:00) + Movilidad (09:00)</p>
+                <p><strong>Almuerzo:</strong> Carbo-Proteico</p>
+                <p><strong>Cena:</strong> Solo Proteína</p>
+            </div>
+        </div>
+
+        <div class="card day-card">
+            <div class="card-title">🏃‍♀️ Viernes</div>
+            <div class="card-body">
+                <p><strong>Entreno:</strong> PUSH 1 (07:00) + Cardio Zona 1/2 (19:00)</p>
+                <p><strong>Almuerzo:</strong> Carbo-Proteico</p>
+                <p><strong>Cena:</strong> Solo Proteína</p>
+            </div>
+        </div>
+
+        <div class="card day-card">
+            <div class="card-title">🏋️‍♀️ Sábado</div>
+            <div class="card-body">
+                <p><strong>Entreno:</strong> LEGS 1 (10:00/11:00) + Cardio</p>
+                <p><strong>Almuerzo:</strong> Carbo-Proteico</p>
+                <p><strong>Cena:</strong> Solo Proteína</p>
+            </div>
+        </div>
+
+        <div class="card day-card" style="border-left-color: var(--accent-tertiary);">
+            <div class="card-title">🧘‍♀️ Domingo</div>
+            <div class="card-body">
+                <p><strong>Entreno:</strong> Descanso Activo / Zona 2 pura<br><span class="badge green" style="margin-top: 5px;">Descarga Metabólica</span></p>
+                <p><strong>Almuerzo:</strong> Cheat Meal Estratégico</p>
+                <p><strong>Cena:</strong> Solo Proteína</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- TIPS GENERALES -->
+    <div class="grid grid-cols-2" style="margin-top: 2rem;">
+        <div class="tip-card">
+            <h3>🥗 La Ley de los Vegetales</h3>
+            <ul class="list-group">
+                <li><strong>Libres (ambas comidas):</strong> Hojas verdes (lechuga, espinaca, rúcula, kale), pepino, apio, espárragos, brócoli.</li>
+                <li><strong>Restringidos (solo Carbo-Proteica):</strong> Frutas de todo tipo, remolacha, zanahoria, choclo, calabaza pesada. <em>Son carbohidratos, trátalos como tal.</em></li>
+            </ul>
+        </div>
+        
+        <div class="tip-card">
+            <h3>⚡ Estrategia Peri-entrenamiento</h3>
+            <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 1rem;">Clínicamente perfecta para evitar el catabolismo y aportar glucosa directa sin pesadez gástrica (Early Morning 07:00hs).</p>
+            <ul class="list-group">
+                <li><strong>Pre-entreno (06:30 AM):</strong> Café negro + 2 dátiles + puñado de frambuesas + 1 cdita de miel.</li>
+                <li><em>Nota: Agrega tus 5g de Creatina aquí o en el desayuno posterior.</em></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- DESAYUNOS Y MEDIATARDES -->
+    <h2 id="desayunos">☀️ Desayunos y Mediatardes</h2>
+    <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Te verde antes de cardio pero no todos los días.</p>
+
+    <!-- Opción 1 -->
+    <div class="meal-comparison">
+        <div class="meal-box diana">
+            <div class="meal-header">
+                <h4>Opción 1 (Eléctrica)</h4>
+                <span class="person-tag diana">Diana (355 kcal)</span>
+            </div>
+            <p style="color: var(--text-secondary); font-size: 0.95rem;">2 rebanadas pan integral (~60g) + 2 huevos medianos + 1/4 palta (aprox. 35g).</p>
+            <div class="macro-bar">
+                <div class="macro-item macro-p"><span class="macro-val">19g</span>PRO</div>
+                <div class="macro-item macro-c"><span class="macro-val">34g</span>CARB</div>
+                <div class="macro-item macro-g"><span class="macro-val">17g</span>GRA</div>
+            </div>
+        </div>
+        <div class="meal-box mati">
+            <div class="meal-header">
+                <h4>Opción 1 (Eléctrica Reformulada)</h4>
+                <span class="person-tag mati">Mati (730 kcal)</span>
+            </div>
+            <p style="color: var(--text-secondary); font-size: 0.95rem;">4 rebanadas de pan integral/masa madre (~120g) + 4 huevos enteros revueltos + 1/2 palta pisada (aprox. 70g).</p>
+            <div class="macro-bar">
+                <div class="macro-item macro-p"><span class="macro-val">38g</span>PRO</div>
+                <div class="macro-item macro-c"><span class="macro-val">68g</span>CARB</div>
+                <div class="macro-item macro-g"><span class="macro-val">34g</span>GRA</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Opción 2 -->
+    <div class="meal-comparison">
+        <div class="meal-box diana">
+            <div class="meal-header">
+                <h4>Opción 2 (Anabólica)</h4>
+                <span class="person-tag diana">Diana (180-200 kcal)</span>
+            </div>
+            <p style="color: var(--text-secondary); font-size: 0.95rem;">1 porción mix pancakes Granger (aprox. 40g) + 50g frutos rojos.</p>
+            <div class="macro-bar">
+                <div class="macro-item macro-p"><span class="macro-val">20g</span>PRO</div>
+                <div class="macro-item macro-c"><span class="macro-val">17g</span>CARB</div>
+                <div class="macro-item macro-g"><span class="macro-val">4g</span>GRA</div>
+            </div>
+            <div class="alert">
+                <strong>⚠️ Alerta Clínica</strong>
+                <p>Muy baja en calorías. Vas a tener hambre a las 2 horas. Agrega 2 huevos revueltos al lado para sostener saciedad.</p>
+            </div>
+        </div>
+        <div class="meal-box mati">
+            <div class="meal-header">
+                <h4>Opción 2 (Anabólica + Batido)</h4>
+                <span class="person-tag mati">Mati (476 kcal)</span>
+            </div>
+            <p style="color: var(--text-secondary); font-size: 0.95rem;">2 porciones mix pancakes Granger (~80g) + 100g frutos rojos. <strong>Innegociable:</strong> Sumar 1 batido al lado (1 scoop de proteína en 250ml de leche).</p>
+            <div class="macro-bar">
+                <div class="macro-item macro-p"><span class="macro-val">50g</span>PRO</div>
+                <div class="macro-item macro-c"><span class="macro-val">42g</span>CARB</div>
+                <div class="macro-item macro-g"><span class="macro-val">12g</span>GRA</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Opción 3 -->
+    <div class="meal-comparison">
+        <div class="meal-box diana">
+            <div class="meal-header">
+                <h4>Opción 3 (Rápida)</h4>
+                <span class="person-tag diana">Diana (490 kcal)</span>
+            </div>
+            <p style="color: var(--text-secondary); font-size: 0.95rem;">200g Yogurt natural entero + 1 scoop Proteína (30g) + 20g Quinoa pop + 1 manzana (150g) + 3 mitades nuez (15g).</p>
+            <div class="macro-bar">
+                <div class="macro-item macro-p"><span class="macro-val">37g</span>PRO</div>
+                <div class="macro-item macro-c"><span class="macro-val">50g</span>CARB</div>
+                <div class="macro-item macro-g"><span class="macro-val">18g</span>GRA</div>
+            </div>
+        </div>
+        <div class="meal-box mati">
+            <div class="meal-header">
+                <h4>Opción 3 (Alto Octanaje)</h4>
+                <span class="person-tag mati">Mati (840 kcal)</span>
+            </div>
+            <p style="color: var(--text-secondary); font-size: 0.95rem;">300g Yogurt natural entero + 1.5 scoops Proteína (45g) + 40g Quinoa pop/Avena + 1 manzana grande (200g) + 6 mitades nuez (30g).</p>
+            <div class="macro-bar">
+                <div class="macro-item macro-p"><span class="macro-val">58g</span>PRO</div>
+                <div class="macro-item macro-c"><span class="macro-val">85g</span>CARB</div>
+                <div class="macro-item macro-g"><span class="macro-val">30g</span>GRA</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Opción 4 -->
+    <div class="meal-comparison">
+        <div class="meal-box diana">
+            <div class="meal-header">
+                <h4>Opción 4 (Casera)</h4>
+                <span class="person-tag diana">Diana (480 kcal)</span>
+            </div>
+            <p style="color: var(--text-secondary); font-size: 0.95rem;">1 huevo entero + 1 scoop Proteína (30g) + 15g harina avena + 1 manzana verde (150g) + 20g Miel + 3 nueces (15g).</p>
+            <div class="macro-bar">
+                <div class="macro-item macro-p"><span class="macro-val">34g</span>PRO</div>
+                <div class="macro-item macro-c"><span class="macro-val">52g</span>CARB</div>
+                <div class="macro-item macro-g"><span class="macro-val">17g</span>GRA</div>
+            </div>
+        </div>
+        <div class="meal-box mati">
+            <div class="meal-header">
+                <h4>Opción 4 (Casera Peso Pesado)</h4>
+                <span class="person-tag mati">Mati (850 kcal)</span>
+            </div>
+            <p style="color: var(--text-secondary); font-size: 0.95rem;">2 huevos enteros + 1.5 scoops Proteína (45g) + 40g harina avena + 1 manzana verde + 30g Miel (2 cdas) + 6 nueces.</p>
+            <div class="macro-bar">
+                <div class="macro-item macro-p"><span class="macro-val">55g</span>PRO</div>
+                <div class="macro-item macro-c"><span class="macro-val">90g</span>CARB</div>
+                <div class="macro-item macro-g"><span class="macro-val">30g</span>GRA</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- COMIDAS CARBO-PROTEICAS -->
+    <h2 id="carbo-proteicas">🔋 Comidas Carbo-Proteicas</h2>
+    <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Nota: Los almidones secos absorben agua y multiplican su peso por 3 al hervirse.</p>
+
+    <!-- Opción 1 -->
+    <div class="meal-comparison">
+        <div class="meal-box diana">
+            <div class="meal-header">
+                <h4>Opción 1 (Clásica)</h4>
+                <span class="person-tag diana">Diana (415 kcal)</span>
+            </div>
+            <p style="color: var(--text-secondary); font-size: 0.95rem;">150g Suprema pollo (110-115g cocida) + 60g Arroz/Quinoa (180g cocido) + Lechuga/Tomate.</p>
+            <div class="macro-bar">
+                <div class="macro-item macro-p"><span class="macro-val">40g</span>PRO</div>
+                <div class="macro-item macro-c"><span class="macro-val">51g</span>CARB</div>
+                <div class="macro-item macro-g"><span class="macro-val">5g</span>GRA</div>
+            </div>
+        </div>
+        <div class="meal-box mati">
+            <div class="meal-header">
+                <h4>Opción 1 (Clásica de Volumen)</h4>
+                <span class="person-tag mati">Mati (730 kcal)</span>
+            </div>
+            <p style="color: var(--text-secondary); font-size: 0.95rem;">250g Suprema de pollo (crudo / 180-185g cocido) + 120g Arroz/Quinoa (crudo / 360g cocido) + Lechuga/Tomate.</p>
+            <div class="macro-bar">
+                <div class="macro-item macro-p"><span class="macro-val">65g</span>PRO</div>
+                <div class="macro-item macro-c"><span class="macro-val">100g</span>CARB</div>
+                <div class="macro-item macro-g"><span class="macro-val">8g</span>GRA</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Opción 2 -->
+    <div class="meal-comparison">
+        <div class="meal-box diana">
+            <div class="meal-header">
+                <h4>Opción 2 (Densidad Limpia)</h4>
+                <span class="person-tag diana">Diana (350 kcal)</span>
+            </div>
+            <p style="color: var(--text-secondary); font-size: 0.95rem;">150g Bife magro (110-115g cocido) + 150g Papa/Camote (hervido 150g / horno 120g) + Ensalada verde.</p>
+            <div class="macro-bar">
+                <div class="macro-item macro-p"><span class="macro-val">36g</span>PRO</div>
+                <div class="macro-item macro-c"><span class="macro-val">34g</span>CARB</div>
+                <div class="macro-item macro-g"><span class="macro-val">8g</span>GRA</div>
+            </div>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 10px;"><em>Nota: Puedes subir la papa a 200g si tienes hambre.</em></p>
+        </div>
+        <div class="meal-box mati">
+            <div class="meal-header">
+                <h4>Opción 2 (Densidad Limpia)</h4>
+                <span class="person-tag mati">Mati (680 kcal)</span>
+            </div>
+            <p style="color: var(--text-secondary); font-size: 0.95rem;">250g Bife magro (crudo / 180-185g cocido) + 350g Papa/Camote (crudo / 280g horno) + Ensalada verde.</p>
+            <div class="macro-bar">
+                <div class="macro-item macro-p"><span class="macro-val">60g</span>PRO</div>
+                <div class="macro-item macro-c"><span class="macro-val">80g</span>CARB</div>
+                <div class="macro-item macro-g"><span class="macro-val">14g</span>GRA</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Opción 3 -->
+    <div class="meal-comparison">
+        <div class="meal-box diana">
+            <div class="meal-header">
+                <h4>Opción 3 (Pescado/Lípido)</h4>
+                <span class="person-tag diana">Diana (470 kcal)</span>
+            </div>
+            <p style="color: var(--text-secondary); font-size: 0.95rem;">1 Lata Atún al natural (120g drenado) + 60g Fideos/Lentejas (cocido 180g) + 15ml Aceite de Oliva + Tomate/Pepino.</p>
+            <div class="macro-bar">
+                <div class="macro-item macro-p"><span class="macro-val">33g</span>PRO</div>
+                <div class="macro-item macro-c"><span class="macro-val">46g</span>CARB</div>
+                <div class="macro-item macro-g"><span class="macro-val">16g</span>GRA</div>
+            </div>
+        </div>
+        <div class="meal-box mati">
+            <div class="meal-header">
+                <h4>Opción 3 (Pescado/Lípido)</h4>
+                <span class="person-tag mati">Mati (920 kcal)</span>
+            </div>
+            <p style="color: var(--text-secondary); font-size: 0.95rem;">2 Latas de Atún (240g drenado) + 120g Fideos/Lentejas (crudo / 360g cocido) + 30ml Aceite Oliva + Tomate/Pepino.</p>
+            <div class="macro-bar">
+                <div class="macro-item macro-p"><span class="macro-val">66g</span>PRO</div>
+                <div class="macro-item macro-c"><span class="macro-val">92g</span>CARB</div>
+                <div class="macro-item macro-g"><span class="macro-val">32g</span>GRA</div>
+            </div>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 10px;"><em>Excelente para días de doble turno.</em></p>
+        </div>
+    </div>
+
+    <!-- Opción 4 y 5 -->
+    <div class="meal-comparison">
+        <div class="meal-box diana">
+            <div class="meal-header">
+                <h4>Opción 4 (LA PIZZA - Caballo de Troya)</h4>
+                <span class="person-tag diana">Diana (790-850 kcal)</span>
+            </div>
+            <p style="color: var(--text-secondary); font-size: 0.95rem;">2 huevos + 2 porciones pizza promedio + 15ml Aceite Oliva + Tomate/Pepino.</p>
+            <div class="macro-bar">
+                <div class="macro-item macro-p"><span class="macro-val">32g</span>PRO</div>
+                <div class="macro-item macro-c"><span class="macro-val">65g</span>CARB</div>
+                <div class="macro-item macro-g"><span class="macro-val">44g</span>GRA</div>
+            </div>
+            <div class="alert">
+                <strong>⚠️ Alerta Clínica</strong>
+                <p>Rompe el déficit diario (triple de grasa). Déjala EXCLUSIVAMENTE para el Cheat Meal del domingo.</p>
+            </div>
+        </div>
+        <div class="meal-box mati">
+            <div class="meal-header">
+                <h4>Opción 4 (LA PIZZA - Combustible)</h4>
+                <span class="person-tag mati">Mati (1200+ kcal)</span>
+            </div>
+            <p style="color: var(--text-secondary); font-size: 0.95rem;">3 huevos plancha + 4 porciones de pizza + 15ml Aceite Oliva ensalada + Tomate/Pepino.</p>
+            <div class="macro-bar">
+                <div class="macro-item macro-p"><span class="macro-val">55g</span>PRO</div>
+                <div class="macro-item macro-c"><span class="macro-val">130g</span>CARB</div>
+                <div class="macro-item macro-g"><span class="macro-val">60g</span>GRA</div>
+            </div>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 10px;"><em>Veredicto: Él sí puede salir impune porque su motor metabólico lo va a incinerar.</em></p>
+        </div>
+    </div>
+
+    <!-- Mati Opción 5 (Solo para el pero con alerta) -->
+    <div class="card" style="margin-bottom: 2rem;">
+        <div class="meal-header">
+            <h4>Mati: Opción 5 (Vegetariana Ligera)</h4>
+            <span class="person-tag mati">Mati (900 kcal)</span>
+        </div>
+        <p style="color: var(--text-secondary); font-size: 0.95rem;">Tortilla (3 huevos enteros + 2 claras) + 80g de Queso Magro/Light (derretido adentro) + 200g Calabaza + 50g Remolacha + 3 nueces (15g) + Lentejas/Garbanzos/Arroz (120g crudo / 360g cocido).</p>
+        <div class="macro-bar" style="max-width: 400px; margin-bottom: 1rem;">
+            <div class="macro-item macro-p"><span class="macro-val">65g</span>PRO</div>
+            <div class="macro-item macro-c"><span class="macro-val">85g</span>CARB</div>
+            <div class="macro-item macro-g"><span class="macro-val">36g</span>GRA</div>
+        </div>
+        <div class="alert">
+            <strong>⚠️ Alerta Clínica</strong>
+            <p>Falta proteína grave aquí. Agrégale 1 scoop de proteína o sube a 2 huevos enteros + 4 claras.</p>
+        </div>
+    </div>
+
+
+    <!-- COMIDAS SOLO PROTEICAS DIANA -->
+    <h2 id="solo-proteicas">📉 Comidas Solo Proteicas (Diana)</h2>
+    <div class="grid grid-cols-3">
+        <div class="card">
+            <div class="card-title">Opción 1 (Lipolítica Máxima)</div>
+            <p style="color: var(--text-secondary); font-size: 0.95rem;">150g Suprema cruda (110-115g cocida) + Ensalada gigante + 1/2 palta (70g) + 15ml Aceite Oliva.</p>
+            <div class="macro-bar">
+                <div class="macro-item macro-p"><span class="macro-val">36g</span>P</div>
+                <div class="macro-item macro-c"><span class="macro-val">10g</span>C</div>
+                <div class="macro-item macro-g"><span class="macro-val">27g</span>G</div>
+            </div>
+            <div class="badge" style="margin-top: 10px;">425 kcal</div>
+        </div>
+        
+        <div class="card">
+            <div class="card-title">Opción 2 (Vegetariana Ligera)</div>
+            <p style="color: var(--text-secondary); font-size: 0.95rem;">Tortilla (2 huevos + 2 claras) + 50g Queso Magro/Light + 200g Calabaza + 50g Remolacha + 3 nueces (15g).</p>
+            <div class="macro-bar">
+                <div class="macro-item macro-p"><span class="macro-val">18g</span>P</div>
+                <div class="macro-item macro-c"><span class="macro-val">20g</span>C</div>
+                <div class="macro-item macro-g"><span class="macro-val">15g</span>G</div>
+            </div>
+            <div class="badge" style="margin-top: 10px;">270 kcal</div>
+            <div class="alert" style="margin-top: 10px; padding: 0.75rem;">
+                <strong>⚠️ Alerta</strong>
+                <p>18g no son suficientes. Agrega 1 scoop de proteína o sube a 2 huevos + 4 claras.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Opción 3 (Carne y Cero Almidón)</div>
+            <p style="color: var(--text-secondary); font-size: 0.95rem;">150g Bife magro (110-115g cocida) + 200g Puré Calabaza + Lechuga salteada con hilo de aceite (5g).</p>
+            <div class="macro-bar">
+                <div class="macro-item macro-p"><span class="macro-val">36g</span>P</div>
+                <div class="macro-item macro-c"><span class="macro-val">14g</span>C</div>
+                <div class="macro-item macro-g"><span class="macro-val">13g</span>G</div>
+            </div>
+            <div class="badge" style="margin-top: 10px;">310 kcal</div>
+        </div>
+    </div>
+    
+    <div class="tip-card" style="margin-top: 1.5rem; border-left: 4px solid var(--accent-tertiary);">
+        <h3>🍫 El Chocolate</h3>
+        <p>El pedacito de chocolate semiamargo (15-20g) después de almorzar o cenar es viable. Te ayuda psicológicamente a marcar el "fin de la comida" y promueve la adherencia. Se queda en el plan.</p>
+    </div>
+
+    <!-- EL BATIDO INTRA/POST MATI -->
+    <h2 id="batido">🥤 Batido Intra/Post-Entreno (Mati)</h2>
+    <div class="card" style="border-top: 4px solid var(--accent-secondary);">
+        <div class="card-title">El Seguro de Vida</div>
+        <p style="color: var(--text-secondary); margin-bottom: 1rem;">Como Matías no puede tener comidas "Solo Proteína", si le falta energía o no tiene estómago, debe implementar este comodín:</p>
+        <ul class="list-group">
+            <li><strong>Ingredientes:</strong> 1 scoop y medio de Proteína (45g) + 1 banana + 1 cucharada sopera de Mantequilla de Maní (20g) + Leche.</li>
+            <li><strong>Aporte:</strong> ~500 kcal fáciles de digerir que garantizan llegar a los macros sin colapsar el sistema digestivo.</li>
+        </ul>
+    </div>
+
+    <!-- LA MATEMÁTICA CLÍNICA -->
+    <h2 id="matematica">🧮 La Matemática Clínica: Crudo vs. Cocido</h2>
+    <div class="grid grid-cols-3">
+        <div class="card">
+            <div class="card-title" style="color: var(--accent-alert);">🥩 Proteínas</div>
+            <p style="font-size: 0.9rem; margin-bottom: 10px;"><strong>Regla de la Deshidratación (Pierden 25-30%)</strong></p>
+            <p style="color: var(--text-secondary); font-size: 0.9rem;">El calor expulsa agua. Macros intactos.</p>
+            <p style="margin-top: 10px; font-size: 0.95rem;">150g Crudo ➔ 110-115g Cocido</p>
+        </div>
+        <div class="card">
+            <div class="card-title" style="color: var(--accent-tertiary);">🍚 Carbohidratos Secos</div>
+            <p style="font-size: 0.9rem; margin-bottom: 10px;"><strong>Regla de la Hidratación (Multiplican x3)</strong></p>
+            <p style="color: var(--text-secondary); font-size: 0.9rem;">Absorben agua. Cero calorías extra.</p>
+            <p style="margin-top: 10px; font-size: 0.95rem;">60g Crudo ➔ 180g Hervido<br><em>Descarga: 40g ➔ 120g</em></p>
+        </div>
+        <div class="card">
+            <div class="card-title" style="color: var(--accent-secondary);">🥔 Tubérculos</div>
+            <p style="font-size: 0.9rem; margin-bottom: 10px;"><strong>Regla del Horno (Pierden 20%)</strong></p>
+            <p style="color: var(--text-secondary); font-size: 0.9rem;">Al horno pierden humedad. Hervidos mantienen peso.</p>
+            <p style="margin-top: 10px; font-size: 0.95rem;">150g Crudo ➔ 115-120g Horno</p>
+        </div>
+    </div>
+
+    <!-- PROTOCOLOS -->
+    <h2 id="protocolos">💧 Protocolos contra Picoteo y Deshidratación</h2>
+    <div class="grid grid-cols-2">
+        <div class="tip-card">
+            <h3>Agua (Sistema de Bloques)</h3>
+            <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 10px;">No pienses en "2 litros". Piensa en eventos:</p>
+            <ul class="list-group">
+                <li>💧 500ml al levantarse (antes del café)</li>
+                <li>💧 500ml intra-entrenamiento (gym)</li>
+                <li>💧 500ml antes de almorzar</li>
+                <li>💧 500ml antes de cenar</li>
+            </ul>
+        </div>
+        <div class="tip-card">
+            <h3>Estandarización Circadiana</h3>
+            <p style="color: var(--text-secondary); font-size: 0.95rem;">Consumir comidas a horas idénticas cada día estabiliza la insulina, leptina y grelina.</p>
+            <p style="margin-top: 10px; font-weight: 600;">Pon alarmas. Comes a esa hora, y fuera de esa hora, tu boca está cerrada.</p>
+        </div>
+    </div>
+
+    <!-- SNACKS -->
+    <h2 id="snacks">🥜 Protocolos de Snacks</h2>
+    <div class="grid grid-cols-2">
+        <div class="card">
+            <div class="card-title">1. Bloqueo Hormonal del Hambre</div>
+            <p style="color: var(--text-secondary); font-size: 0.95rem;"><strong>2 Huevos duros enteros.</strong> Frena la grelina en seco y tiene un impacto glucémico nulo.</p>
+        </div>
+        <div class="card">
+            <div class="card-title">2. Volumen sin Calorías Útiles</div>
+            <p style="color: var(--text-secondary); font-size: 0.95rem;"><strong>Bastones de apio y pepino</strong> (libre) + 1 cda rasa (15g) queso crema light/humus. Satisface necesidad de masticar.</p>
+        </div>
+        <div class="card">
+            <div class="card-title">3. Densidad Lipídica</div>
+            <p style="color: var(--text-secondary); font-size: 0.95rem;"><strong>15 almendras o 6 mitades de nueces.</strong> Ni una más. No dispares insulina. Densidad calórica masiva.</p>
+        </div>
+        <div class="card">
+            <div class="card-title">4. Reposición de Electrolitos</div>
+            <p style="color: var(--text-secondary); font-size: 0.95rem;"><strong>8 aceitunas verdes o taza de caldo bien salado.</strong> A veces el hambre es caída de presión arterial tras sudar.</p>
+        </div>
+    </div>
+
+    <footer style="text-align: center; margin-top: 4rem; padding: 2rem 0; border-top: 1px solid var(--border-color); color: var(--text-secondary);">
+        <p>Diseñado para lectura rápida y rendimiento. Mobile First. 🚀</p>
+    </footer>
+
+</div>
+
+</body>
+</html>
